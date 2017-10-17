@@ -34,9 +34,8 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumWords()
 	{
-		//TODO: Implement this method in week 2 according to the comments above.  
-		// See the Module 2 support videos if you need help.
-	    return 0;
+		List<String> words = getTokens("[A-z]+");
+	    return words.size();
 	}
 	
 	/**
@@ -54,9 +53,8 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSentences()
 	{
-	    //TODO: Implement this method.  See the Module 2 support videos 
-        // if you need help.
-        return 0;
+		List<String> sentences = getTokens("[^!?.]+");
+        return sentences.size();
 	}
 	
 	/**
@@ -81,9 +79,34 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
-        return 0;
+		int totalSyllables = 0;
+		List<String> words = getTokens("[A-z]+");
+		for (String word : words) {
+			totalSyllables += countSyllables(word);
+		}
+        return totalSyllables;
 	}
-	
+
+	protected int countSyllables(String w) {
+		int numSyllables = 0;
+		boolean newSyllable = true;
+		String vowels = "aeiouy";
+		char[] cArray = w.toCharArray();
+		
+		for (int i = 0; i < cArray.length; i++) {
+			if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' && newSyllable && numSyllables > 0) {
+				numSyllables--;
+			}
+			if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >=0) {
+				newSyllable = false;
+				numSyllables++;
+			} 
+			else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
+				newSyllable = true;
+			}
+		}		
+		return numSyllables;
+	}
 	
 	/* The main method for testing this class. 
 	 * You are encouraged to add your own tests.  */
