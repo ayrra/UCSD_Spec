@@ -86,27 +86,6 @@ public class BasicDocument extends Document
 		}
         return totalSyllables;
 	}
-
-	protected int countSyllables(String w) {
-		int numSyllables = 0;
-		boolean newSyllable = true;
-		String vowels = "aeiouy";
-		char[] cArray = w.toCharArray();
-		
-		for (int i = 0; i < cArray.length; i++) {
-			if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' && newSyllable && numSyllables > 0) {
-				numSyllables--;
-			}
-			if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >=0) {
-				newSyllable = false;
-				numSyllables++;
-			} 
-			else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
-				newSyllable = true;
-			}
-		}		
-		return numSyllables;
-	}
 	
 	/* The main method for testing this class. 
 	 * You are encouraged to add your own tests.  */

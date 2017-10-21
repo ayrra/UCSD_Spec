@@ -28,7 +28,7 @@ public class DocumentBenchmarking {
 
 		// The number of steps to run.  
 		// You can play around with this.
-		int numSteps = 20;
+		int numSteps = 100;
 		
 		// THe number of characters to start with. 
 		// You can play around with this.
@@ -42,23 +42,25 @@ public class DocumentBenchmarking {
 		{
 			// numToCheck holds the number of characters that you should read from the 
 			// file to create both a BasicDocument and an EfficientDocument.  
+			String textToRead = getStringFromFile(textfile, numToCheck);
 			
-			/* Each time through this loop you should:
-			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
-			 * 2. Read numToCheck characters from the file into a String
-			 *     Hint: use the helper method below.
-			 * 3. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates a BasicDocument 
-			 *     b. Calls fleshScore on this document
-			 * 4. Print out the time it took to complete the loop in step 3 
-			 *      (on the same line as the first print statement) followed by a tab (\t)
-			 * 5. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates an EfficientDocument 
-			 *     b. Calls fleshScore on this document
-			 * 6. Print out the time it took to complete the loop in step 5 
-			 *      (on the same line as the first print statement) followed by a newline (\n) 
-			 */  
-			 
+			long startTimeBd = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				BasicDocument bd = new BasicDocument(textToRead);
+				bd.getFleschScore();
+			}
+			long endTimeBd = System.nanoTime();
+			long totalBd =  (endTimeBd - startTimeBd)/1000000;
+			
+			long startTimeEd = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				EfficientDocument ed = new EfficientDocument(textToRead);
+				ed.getFleschScore();
+			}
+			long endTimeEd = System.nanoTime();
+			long totalEd = (endTimeEd - startTimeEd)/1000000;
+			
+			System.out.println(numToCheck + "\t" + totalBd + "\t" + totalEd);	 
 		}
 	
 	}

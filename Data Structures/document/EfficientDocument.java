@@ -50,8 +50,23 @@ public class EfficientDocument extends Document {
 		// That is not a word or a sentence-ending puctuation.
 		// MAKE SURE YOU UNDERSTAND THIS LINE BEFORE YOU CODE THE REST
 		// OF THIS METHOD.
+		numWords = 0;
+		numSentences = 0;
+		numSyllables = 0;
 		List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+");
-		
+		for (int i = 0; i < tokens.size(); i++) {
+			String word = tokens.get(i);
+			if (isWord(word)) {
+				if (i == tokens.size() - 1) {
+					numSentences++;
+				}
+				numSyllables += countSyllables(word);
+				numWords++;
+			}
+			else {
+				numSentences++;
+			}
+		}
 		// TODO: Finish this method.  Remember the countSyllables method from 
 		// Document.  That will come in handy here.  isWord defined above will also help.
 	}
@@ -71,9 +86,8 @@ public class EfficientDocument extends Document {
 	 * @return The number of sentences in the document.
 	 */
 	@Override
-	public int getNumSentences() {
-		//TODO: write this method.  Hint: It's simple
-		return 0;
+	public int getNumSentences() {	
+		return numSentences;
 	}
 
 	
@@ -93,8 +107,7 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumWords() {
-		//TODO: write this method.  Hint: It's simple
-	    return 0;
+	    return numWords;
 	}
 
 
@@ -115,8 +128,7 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumSyllables() {
-        //TODO: write this method.  Hint: It's simple
-        return 0;
+        return numSyllables;
 	}
 	
 	// Can be used for testing
