@@ -16,12 +16,14 @@ import org.junit.Test;
  */
 public class MyLinkedListTester {
 
-	private static final int LONG_LIST_LENGTH =10; 
+	private static final int LONG_LIST_LENGTH =100000; 
 
 	MyLinkedList<String> shortList;
 	MyLinkedList<Integer> emptyList;
 	MyLinkedList<Integer> longerList;
 	MyLinkedList<Integer> list1;
+	MyLinkedList<Integer> myList;
+	MyLinkedList<Integer> myList2;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -42,7 +44,8 @@ public class MyLinkedListTester {
 		list1.add(65);
 		list1.add(21);
 		list1.add(42);
-		
+		myList = new MyLinkedList<Integer>();
+		myList2 = new MyLinkedList<Integer>();
 	}
 
 	
@@ -115,6 +118,18 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check size is correct ", 2, list1.size());
 		
 		// TODO: Add more tests here
+		
+		int b = longerList.remove(LONG_LIST_LENGTH - 1);
+		assertEquals("Remove: Check that b is correct", LONG_LIST_LENGTH-1, b);
+		assertEquals("Remove: check size is correct ", LONG_LIST_LENGTH-1, longerList.size());
+		try {
+			longerList.get(-1);
+			fail("we are out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+			
+		}
+		
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -123,8 +138,12 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd()
 	{
-        // TODO: implement this test
-		
+        for (int i = 1; i <= 1000; i++) {
+        	myList.add(i);
+        }
+        assertEquals("We should get 1", (Integer)1, myList.get(0));
+        assertEquals("We should get 65", (Integer)65, myList.get(64));
+        assertEquals("We should get 100", (Integer)100, myList.get(99));
 	}
 
 	
@@ -133,6 +152,11 @@ public class MyLinkedListTester {
 	public void testSize()
 	{
 		// TODO: implement this test
+		assertEquals("We should get 2", 2, shortList.size());
+		assertEquals("We should get 0", 0, emptyList.size());
+		assertEquals("We should get: " + LONG_LIST_LENGTH , LONG_LIST_LENGTH, longerList.size());
+		assertEquals("We should get 3", 3, list1.size());
+		
 	}
 
 	
@@ -144,7 +168,11 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex()
 	{
-        // TODO: implement this test
+		myList2.add(0,0);
+		myList2.add(0,1);
+		myList2.add(2,1);
+		
+		assertEquals("Size should be 3", 3, myList2.size());
 		
 	}
 	
@@ -152,7 +180,16 @@ public class MyLinkedListTester {
 	@Test
 	public void testSet()
 	{
-	    // TODO: implement this test
+	    int a = longerList.set(0, 1000);
+	    int b = longerList.set(1, 1000);
+	    int c = longerList.set(LONG_LIST_LENGTH - 1, 1000);
+	    
+	    assertEquals("We should get 1000", (Integer)1000, longerList.get(0));
+	    assertEquals("We should get 1000", (Integer)1000, longerList.get(1));
+	    assertEquals("We should get 1000", (Integer)1000, longerList.get(LONG_LIST_LENGTH-1));
+	    assertEquals("We should get 0", 0, a);
+	    assertEquals("We should get 1", 1, b);
+	    assertEquals("We should get 1", LONG_LIST_LENGTH-1, c);
 	    
 	}
 	
