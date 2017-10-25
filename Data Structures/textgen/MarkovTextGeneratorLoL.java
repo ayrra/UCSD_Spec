@@ -32,7 +32,48 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public void train(String sourceText)
 	{
-		// TODO: Implement this method
+		if (!starter.equals("")) {
+	    	return;
+	    }
+		
+		String words[] = sourceText.split("\\s+");
+		String prevWord;
+		ListNode node;
+		String w;
+		
+		starter = words[0];
+		prevWord = starter;
+		
+		for (int i = 1; i < words.length; i++) {
+			
+			w = words[i];
+			
+			node = findNode(prevWord);
+
+			if (node != null) {
+				node.addNextWord(w);
+			}
+			else {
+				node = new ListNode(prevWord);
+				node.addNextWord(w);
+				wordList.add(node);
+			}
+			prevWord = w;
+		}
+		
+		//starter is now nextword for the last element in words
+		//if the node does not exist we have to make it
+		String lastWord = words[words.length - 1];
+		node = findNode(words[words.length - 1]);
+		if (node != null) {
+			node.addNextWord(starter);
+		}
+		else {
+			node = new ListNode(lastWord);
+			node.addNextWord(starter);
+			wordList.add(node);
+		}
+		
 	}
 	
 	/** 
@@ -40,8 +81,23 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	 */
 	@Override
 	public String generateText(int numWords) {
-	    // TODO: Implement this method
-		return null;
+		int count = 1;
+	    String currWord = starter;
+	    String output = "";
+	    
+	    if (numWords == 0) {
+	    	return "";
+	    }
+	    output = output.concat(currWord);
+	    
+	    while (count < numWords) {
+	    	ListNode currentNode = findNode(currWord);
+	    	currWord = currentNode.getRandomNextWord(rnGenerator);
+	    	output = output.concat(" " + currWord);
+	    	count++;
+	    }
+	    
+		return output;
 	}
 	
 	
@@ -61,11 +117,19 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public void retrain(String sourceText)
 	{
-		// TODO: Implement this method.
+		wordList = new LinkedList<ListNode>();
+		starter = "";
+		train(sourceText);
 	}
 	
-	// TODO: Add any private helper methods you need here.
-	
+	private ListNode findNode(String w) {
+		for (ListNode n : wordList) {
+			if (w.equals(n.getWord())) {
+				return n;
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * This is a minimal set of tests.  Note that it can be difficult
@@ -141,10 +205,9 @@ class ListNode
 	
 	public String getRandomNextWord(Random generator)
 	{
-		// TODO: Implement this method
-	    // The random number generator should be passed from 
-	    // the MarkovTextGeneratorLoL class
-	    return null;
+		//generator = new Random();
+		int randomIndex = generator.nextInt(nextWords.size());
+	    return nextWords.get(randomIndex);
 	}
 
 	public String toString()
