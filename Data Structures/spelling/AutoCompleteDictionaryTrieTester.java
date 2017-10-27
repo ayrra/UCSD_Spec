@@ -45,7 +45,6 @@ public class AutoCompleteDictionaryTrieTester {
 		
 		DictionaryLoader.loadDictionary(largeDict, dictFile);
 	}
-
 	
 	/** Test if the size method is working correctly.
 	 */

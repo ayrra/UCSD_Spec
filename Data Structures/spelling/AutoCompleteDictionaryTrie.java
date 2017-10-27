@@ -37,10 +37,27 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 * @return true if the word was successfully added or false if it already exists
 	 * in the dictionary.
 	 */
+    
+    //we will be using put and get for the hashmap
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		String lowercaseWord = word.toLowerCase();
+		char[] wordArray = lowercaseWord.toCharArray();
+		TrieNode temp = root;
+		
+		for (char c : wordArray) {
+			temp.insert(c);
+			temp = temp.getChild(c);
+		}
+		//if the endsWord flag is true, that means we already added this so return false
+		if (temp.endsWord()) {
+			return false;
+		}
+		else {
+			temp.setEndsWord(true);
+			size++;
+		    return true;
+		}
 	}
 	
 	/** 
@@ -49,8 +66,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -60,7 +76,19 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+		String lowercaseWord = s.toLowerCase();
+		char wordArray[] = lowercaseWord.toCharArray();
+		TrieNode temp = root;
+		
+		for (char c : wordArray) {
+			if (temp.getChild(c) != null) {
+				temp = temp.getChild(c);
+			}
+			else {
+				return false;
+			}
+		}
+		return temp.endsWord();
 	}
 
 	/** 
@@ -100,8 +128,35 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+    	 TrieNode temp = root;
+    	 List<TrieNode> queue = new LinkedList<TrieNode>();
+    	 List<String> wordsToReturn = new LinkedList<String>();
+    	 char prefixArray[] = prefix.toLowerCase().toCharArray();
+    	 int currentCompletions = 0;
     	 
-         return null;
+    	 for (char c : prefixArray) {
+    		 if (temp.getChild(c) != null) {
+    			 temp = temp.getChild(c);
+    		 }
+    		 else {
+    			 return new LinkedList<String>();
+    		 }
+    	 }
+    	 queue.add(temp);
+    	 
+    	 while (queue.size() != 0 && currentCompletions < numCompletions) {
+    		 TrieNode checkedNode = queue.remove(0);
+    		 
+    		 if (checkedNode.endsWord()) {
+    			 wordsToReturn.add(checkedNode.getText());
+        		 currentCompletions++;
+    		 }
+    		 for (char c : checkedNode.getValidNextCharacters()) {
+    			 queue.add(checkedNode.getChild(c));
+    		 }
+    	 }
+    	 
+         return wordsToReturn;
      }
 
  	// For debugging
