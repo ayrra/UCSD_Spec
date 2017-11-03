@@ -104,8 +104,30 @@ public class GraphAdjMatrix extends Graph {
 	 * @return List<Integer> a list of indices of vertices.  
 	 */	
 	public List<Integer> getDistance2(int v) {
-		// XXX Implement this method in week 2
-		return null;
+		List<Integer> twoStepNeighbors = new ArrayList<Integer>();
+		int vertSize = getNumVertices();
+		
+		int[][] productMatrix = new int[vertSize][vertSize];
+		
+		//perform matrix multiplication and store in productMatrix, this matrix will always be a square so we can use vertSize
+		for (int i = 0; i < vertSize; i++) {
+			for (int j = 0; j < vertSize; j++) {
+				for (int k = 0; k < vertSize; k++) {
+					productMatrix[i][j] += adjMatrix[i][k] * adjMatrix[k][j];
+				}
+			}
+		}
+		
+		//lets find the row we want (v)
+		for (int x = 0; x < productMatrix[v].length; x++) {
+			//now go through each element of the row, and we loop
+			//adding that index however many times the value inside of it was
+			for (int y = 0; y < productMatrix[v][x]; y++) {
+				twoStepNeighbors.add(x);
+			}
+		}
+		
+		return twoStepNeighbors;
 	}
 	
 	/**
